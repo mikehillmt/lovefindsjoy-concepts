@@ -5,7 +5,7 @@ from PIL import Image, ImageOps, ImageDraw
 BASE = Path(__file__).parent
 OUT = BASE / "screenshots"
 OUT.mkdir(exist_ok=True)
-FILES = ["concept-a-daylight.html", "concept-b-evening.html", "index.html"]
+FILES = ["love-finds-joy.html", "concept-a-daylight.html", "concept-b-evening.html", "index.html"]
 MODES = {"desktop": (1440, 1000), "mobile": (390, 844)}
 results = []
 with sync_playwright() as p:
