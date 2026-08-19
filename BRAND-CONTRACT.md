@@ -21,6 +21,8 @@
 - Do not use Vow & Valor or The Hill Code as the active public brand.
 - Do not use cream, beige, ivory, parchment or warm off-white.
 - Do not use serif, script or decorative spiritual fonts. Use Arial/Helvetica.
+- Photography in the current design studies is temporary only. Do not use any images from the wedding photographer in production.
+- Production photography must be personally approved by Mike and Alexis before publication.
 - Do not use AI imagery, generic stock couples, mystical geometry or synthetic diagrams.
 - Do not present Mike and Alexis as therapists, gurus or a perfect couple.
 - Do not imply that coaching can treat trauma, violence, coercive control, addiction or mental illness.
