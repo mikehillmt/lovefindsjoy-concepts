@@ -30,10 +30,11 @@ with sync_playwright() as p:
             assert not errors, (filename, mode, errors)
             assert not failures, (filename, mode, failures)
             if filename == "index.html":
-                for required in ["You are not starting from scratch", "START WITH SOMETHING USEFUL", "This is a listening invitation, not an enrollment invitation"]:
+                for required in ["You are not starting from scratch", "Scope and safety matter from the beginning", "We are building this in public, one useful idea at a time"]:
                     assert required in values["text"], (filename, mode, required)
-                for prohibited in ["Request a founding conversation", "Explore the founding experience", "Founding couples"]:
+                for prohibited in ["Request a founding conversation", "Explore the founding experience", "Founding couples", "The loop is the relationship", "Notice the Loop", "Start with something useful"]:
                     assert prohibited not in values["text"], (filename, mode, prohibited)
+                assert not any((href or "").startswith("mailto:") for href in values["links"])
                 assert values["images"] >= 5
             elif filename.startswith("notes/"):
                 for required in ["You are not starting from scratch", "Recognition comes before correction", "A private five-minute reflection"]:

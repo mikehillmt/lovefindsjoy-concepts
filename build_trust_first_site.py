@@ -13,12 +13,15 @@ desc['content'] = 'Love Finds Joy offers honest, non-blaming relationship educat
 # Add trust-first styles while preserving the approved visual system.
 style = soup.find('style')
 style.string += """
-.resource-kicker{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--sun);margin:0 0 12px}.resource-card{border-top:1px solid rgba(255,255,255,.35);padding-top:24px;margin-top:28px}.resource-card h3{font-size:30px;letter-spacing:-.03em;margin:0 0 10px}.resource-card p{max-width:620px}.resource-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.button-light{background:var(--white);color:var(--olive)}.quiet-invite{font-size:15px;color:rgba(255,255,255,.82);max-width:620px;margin:18px auto 0}.coming{display:inline-block;border:1px solid rgba(255,255,255,.4);padding:8px 11px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}.site-note{font-size:13px;color:var(--muted);max-width:720px}.story-link{display:inline-block;margin-top:12px;font-weight:700}.hero .eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin:0 0 22px}.hero .eyebrow+p{margin-top:26px}@media(max-width:760px){.resource-card h3{font-size:25px}.resource-actions{align-items:flex-start;flex-direction:column}}
+.resource-kicker{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--sun);margin:0 0 12px}.resource-card{border-top:1px solid rgba(255,255,255,.35);padding-top:24px;margin-top:28px}.resource-card h3{font-size:30px;letter-spacing:-.03em;margin:0 0 10px}.resource-card p{max-width:620px}.resource-actions{display:flex;gap:14px;align-items:center;flex-wrap:wrap}.button-light{background:var(--white);color:var(--olive)}.quiet-invite{font-size:15px;color:rgba(255,255,255,.82);max-width:620px;margin:18px 0 0}.coming{display:inline-block;border:1px solid rgba(255,255,255,.4);padding:8px 11px;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}.site-note{font-size:13px;color:var(--muted);max-width:720px}.story-link{display:inline-block;margin-top:12px;font-weight:700}.hero .eyebrow{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--coral);margin:0 0 22px}.hero .eyebrow+p{margin-top:26px}.skip-link{position:absolute;left:10px;top:-80px;background:var(--ink);color:var(--white);padding:12px 16px;z-index:1000}.skip-link:focus{top:10px}a:focus-visible{outline:3px solid var(--sun);outline-offset:4px}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media(max-width:850px){nav{display:block;padding:12px 0}.logo{white-space:nowrap;margin-bottom:8px}.navlinks{gap:8px;justify-content:flex-start;flex-wrap:wrap}.navlinks a:not(.button){display:inline-flex}.navlinks a{min-height:44px;align-items:center;padding:8px}.navlinks .button{padding:12px}.resource-card h3{font-size:25px}.resource-actions{align-items:flex-start;flex-direction:column}}
 """
 
 # Navigation
 nav = soup.find('nav')
-nav.replace_with(BeautifulSoup('''<nav><div class="logo">Love Finds Joy</div><div class="navlinks"><a href="#start">Start here</a><a href="#loop">The loop</a><a href="#about">Our story</a><a href="#resources">Resources</a><a class="button" href="notes/you-are-not-starting-from-scratch.html">Read the first note</a></div></nav>''','html.parser'))
+nav.replace_with(BeautifulSoup('''<nav aria-label="Primary navigation"><div class="logo">Love Finds Joy</div><div class="navlinks"><a href="#start">Start here</a><a href="#about">Our story</a><a href="#scope">Scope and safety</a><a class="button" href="notes/you-are-not-starting-from-scratch.html">Read the first note</a></div></nav>''','html.parser'))
+skip = BeautifulSoup('''<a class="skip-link" href="#main-content">Skip to main content</a>''','html.parser')
+soup.body.insert(0, skip)
+soup.find('main')['id'] = 'main-content'
 
 # Hero
 hero = soup.select_one('.hero')
@@ -51,32 +54,31 @@ voices[0].find('p').string = 'Alexis learned that carrying everything can look l
 voices[1].find('p').string = 'Mike learned that empathy, loyalty and trying harder can become ways of remaining inside a pattern. His practice is telling the truth earlier and remembering that care does not require self-abandonment.'
 
 loop = soup.select_one('#loop')
-loop.select_one('.loop-intro > div > p').string = 'Something ordinary happens. Each person protects something important. Those protections collide, and suddenly the couple is fighting each other instead of seeing what is happening between them. The pattern is the shared problem.'
+loop.decompose()
 
-# Replace premature offer with public resources.
+choice = soup.select_one('.choice')
+choice.replace_with(BeautifulSoup('''<section class="choice"><div class="wrap choice-grid"><h2>Choosing joy is not choosing constant happiness.</h2><div class="choice-copy"><p>Joy means the relationship two people consciously build. It can include honesty, boundaries, repair, play, disappointment and disagreement.</p><p>The goal is not perfect communication. The goal is becoming more able to see what is happening, remain yourself and choose how you want to meet each other.</p></div></div></section>''','html.parser'))
+
+# Paid and future-resource sections stay out of the Week 0 public artifact.
 pilot = soup.select_one('#pilot')
-resources = BeautifulSoup('''<section class="pilot" id="resources"><div class="wrap pilot-grid"><div><p class="resource-kicker">Start with something useful</p><h2>Resources for the relationship you are living now</h2><p>No application. No diagnosis. No promise that one worksheet can solve a relationship. Just careful language and one practice you can try together.</p></div><div><div class="resource-card"><span class="coming">Available now</span><h3>Making Room for Desire</h3><p>A gentle guide to the attention, relational space and everyday conditions in which desire can develop. It does not blame either partner or turn intimacy into a demand.</p><div class="resource-actions"><a class="button button-light" href="https://lovefindsjoy.com/share/making-room-for-desire/making-room-for-desire.pdf">Read the guide</a></div></div><div class="resource-card"><span class="coming">Coming during the public series</span><h3>Notice the Loop</h3><p>A one-page private reflection for noticing Trigger, Protection, Collision and Choice in one ordinary moment.</p></div></div></div></section>''','html.parser')
-pilot.replace_with(resources)
+pilot.decompose()
 
 about = soup.select_one('.about')
-about.select_one('h2').string = 'Mike and Alexis Hill'
-pars = about.select('.about-copy p')
-pars[0].string = 'We met in 2015, lost touch for nine years, reconnected in 2024 and married in Montana in 2025. We did not arrive as blank slates. We arrived with full lives, different histories and a shared desire to build consciously.'
-pars[1].string = 'Love Finds Joy grew from the questions we keep practicing in ordinary life: What are we protecting? What happens between us next? Can we tell the truth without turning it into a weapon? Can we stay connected without abandoning ourselves?'
-pars[2].string = 'We are guides and fellow practitioners, not therapists, referees or a perfect-couple example. Our role is to offer language, reflection and practical relationship education while respecting the authority each couple retains over its own life.'
+about.decompose()
 
 faq = soup.select_one('.faq')
-faq.select_one('h2').string = 'What to expect from Love Finds Joy'
+faq['id'] = 'scope'
+faq.select_one('h2').string = 'Scope and safety matter from the beginning'
 faq_items = faq.select('.faq-grid article')
 faq_copy = [
-('What is this?','Relationship education, honest founder conversations, reflections and small practices that help couples recognize patterns without appointing a villain.'),
+('What is this?','Love Finds Joy offers relationship education, honest founder conversations, reflections and small practices that help couples recognize patterns without appointing a villain.'),
 ('Is this therapy?','No. Love Finds Joy does not diagnose, treat trauma or provide crisis support. We will name those boundaries clearly and refer to qualified care when another kind of help is needed.'),
-('Will you take sides?','No. We will not become a referee or tell a couple whether to stay together. The authority to choose the relationship remains with the people living it.'),
-('What if a relationship is unsafe?','Content and coaching are not appropriate responses to violence, coercive control, an immediate safety crisis or unmanaged addiction. Those situations require specialized support.')]
+('Will you take sides?','No. We will not become a referee or tell a couple whether to stay together. Both partners must be willing participants, and both retain authority over their choices and relationship.'),
+('What if a relationship is unsafe?','Content and coaching are not appropriate responses to violence, coercive control, an immediate safety crisis, unmanaged addiction or concerns requiring clinical care. Contact local emergency services or a qualified crisis resource if you are in immediate danger. Do not use Love Finds Joy forms or social messages for emergency support.')]
 for a,(h,p) in zip(faq_items,faq_copy): a.find('h3').string=h; a.find('p').string=p
 
 final = soup.select_one('.final')
-final.replace_with(BeautifulSoup('''<section class="final"><div class="wrap"><h2>If this felt familiar, stay close.</h2><p>We are beginning with honest conversations and useful practices. No program decision is required. Tell us which line described something you recognize.</p><a class="button" href="mailto:hello@lovefindsjoy.com?subject=The%20line%20that%20felt%20familiar">Tell us what felt familiar</a><p class="quiet-invite">This is a listening invitation, not an enrollment invitation.</p></div></section>''','html.parser'))
+final.replace_with(BeautifulSoup('''<section class="final"><div class="wrap"><h2>We are building this in public, one useful idea at a time.</h2><p>We are developing a small founding couples experience, but it is not open for applications yet. For now, we are sharing the language, reflections and practices behind the work so couples can decide for themselves what feels recognizable and useful.</p><p class="quiet-invite">Start with the first note. Nothing else is required.</p></div></section>''','html.parser'))
 
 footer = soup.find('footer')
 footer.select_one('.wrap').string = 'Love Finds Joy · Mike and Alexis Hill · Relationship education for couples who want to grow together'
@@ -86,7 +88,7 @@ main = soup.find('main')
 sections = {c[0]: x for x in soup.find_all('section') if (c:=x.get('class'))}
 for node in list(main.find_all('section', recursive=False)):
     node.extract()
-order = ['hero','recognize','truth','story','loop','choice','pilot','about','life','faq','final']
+order = ['hero','recognize','truth','story','choice','life','faq','final']
 for name in order:
     node = sections.get(name)
     if node:
